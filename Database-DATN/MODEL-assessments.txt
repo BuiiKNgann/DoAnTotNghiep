@@ -1,0 +1,77 @@
+const mongoose = require('mongoose');
+
+// Evaluation
+const EvaluationSchema = new mongoose.Schema({
+  student: { type: mongoose.Schema.Types.ObjectId, ref: 'StudentProfile' },
+  subject: { type: mongoose.Schema.Types.ObjectId, ref: 'Subject' },
+  teacher: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  term: String,
+  regularComment: String,
+  midtermComment: String,
+  finalComment: String,
+  achievementLevel: {
+    type: String,
+    enum: ['Hoàn thành xuất sắc', 'Hoàn thành tốt', 'Hoàn thành', 'Chưa hoàn thành']
+  },
+  updatedAt: { type: Date, default: Date.now }
+});
+const Evaluation = mongoose.model('Evaluation', EvaluationSchema);
+
+// CompetencyAssessment
+const CompetencyAssessmentSchema = new mongoose.Schema({
+  student: { type: mongoose.Schema.Types.ObjectId, ref: 'StudentProfile' },
+  term: String,
+  teacher: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  competencies: [{
+    name: {
+      type: String,
+      enum: ['Tự chủ và tự học', 'Giao tiếp và hợp tác', 'Giải quyết vấn đề và sáng tạo']
+    },
+    level: {
+      type: String,
+      enum: ['Tốt', 'Đạt', 'Cần cố gắng']
+    }
+  }],
+  updatedAt: { type: Date, default: Date.now }
+});
+const CompetencyAssessment = mongoose.model('CompetencyAssessment', CompetencyAssessmentSchema);
+
+// CharacterAssessment
+const CharacterAssessmentSchema = new mongoose.Schema({
+  student: { type: mongoose.Schema.Types.ObjectId, ref: 'StudentProfile' },
+  term: String,
+  teacher: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  characters: [{
+    name: {
+      type: String,
+      enum: ['Chăm học, chăm làm', 'Tự tin, tự trọng', 'Trung thực, trách nhiệm']
+    },
+    level: {
+      type: String,
+      enum: ['Tốt', 'Đạt', 'Cần cố gắng']
+    }
+  }],
+  updatedAt: { type: Date, default: Date.now }
+});
+const CharacterAssessment = mongoose.model('CharacterAssessment', CharacterAssessmentSchema);
+
+// GeneralReport
+const GeneralReportSchema = new mongoose.Schema({
+  student: { type: mongoose.Schema.Types.ObjectId, ref: 'StudentProfile' },
+  term: String,
+  homeroomTeacher: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  overallComment: String,
+  learningResult: {
+    type: String,
+    enum: ['Được lên lớp', 'Được lên lớp có điều kiện', 'Chưa được lên lớp']
+  },
+  createdAt: { type: Date, default: Date.now }
+});
+const GeneralReport = mongoose.model('GeneralReport', GeneralReportSchema);
+
+module.exports = {
+  Evaluation,
+  CompetencyAssessment,
+  CharacterAssessment,
+  GeneralReport
+};

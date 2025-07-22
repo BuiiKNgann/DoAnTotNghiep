@@ -1,0 +1,21 @@
+const mongoose = require('mongoose');
+
+// Class
+const ClassSchema = new mongoose.Schema({
+  className: String,
+  grade: String,
+  academicYear: String,
+  homeroomTeacher: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'StudentProfile' }]
+});
+const Class = mongoose.model('Class', ClassSchema);
+
+// Subject
+const SubjectSchema = new mongoose.Schema({
+  name: String,
+  code: String,
+  isRequired: { type: Boolean, default: true }
+});
+const Subject = mongoose.model('Subject', SubjectSchema);
+
+module.exports = { Class, Subject };

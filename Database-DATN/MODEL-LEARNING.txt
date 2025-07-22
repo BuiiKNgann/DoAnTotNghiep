@@ -1,0 +1,37 @@
+const mongoose = require('mongoose');
+
+// Material
+const MaterialSchema = new mongoose.Schema({
+  title: String,
+  description: String,
+  fileUrl: String,
+  uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  class: { type: mongoose.Schema.Types.ObjectId, ref: 'Class' },
+  subject: { type: mongoose.Schema.Types.ObjectId, ref: 'Subject' },
+  uploadedAt: { type: Date, default: Date.now }
+});
+const Material = mongoose.model('Material', MaterialSchema);
+
+// Assignment
+const AssignmentSchema = new mongoose.Schema({
+  title: String,
+  description: String,
+  class: { type: mongoose.Schema.Types.ObjectId, ref: 'Class' },
+  subject: { type: mongoose.Schema.Types.ObjectId, ref: 'Subject' },
+  dueDate: Date,
+  uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+});
+const Assignment = mongoose.model('Assignment', AssignmentSchema);
+
+// Submission
+const SubmissionSchema = new mongoose.Schema({
+  assignment: { type: mongoose.Schema.Types.ObjectId, ref: 'Assignment' },
+  student: { type: mongoose.Schema.Types.ObjectId, ref: 'StudentProfile' },
+  fileUrl: String,
+  submittedAt: { type: Date, default: Date.now },
+  gradedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  feedback: String
+});
+const Submission = mongoose.model('Submission', SubmissionSchema);
+
+module.exports = { Material, Assignment, Submission };

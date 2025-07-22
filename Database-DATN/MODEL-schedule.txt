@@ -1,0 +1,26 @@
+const mongoose = require('mongoose');
+
+/**
+ * Model lịch học, lịch kiểm tra, lịch nghỉ,...
+ * Dành cho tất cả lớp học hoặc một lớp cụ thể.
+ */
+const ScheduleSchema = new mongoose.Schema({
+  title: String, // Ví dụ: "Kiểm tra giữa kỳ Toán", "Nghỉ lễ 30/4"
+  description: String, // Ghi chú chi tiết nếu có
+  type: {
+    type: String,
+    enum: ['Lịch học', 'Kiểm tra', 'Nghỉ học', 'Sự kiện'],
+    default: 'Lịch học'
+  },
+  date: Date, // Ngày diễn ra
+  startTime: String, // HH:mm nếu cần
+  endTime: String, // HH:mm nếu cần
+
+  // Lịch áp dụng cho 1 lớp hoặc toàn trường
+  class: { type: mongoose.Schema.Types.ObjectId, ref: 'Class', default: null },
+
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Admin tạo
+  createdAt: { type: Date, default: Date.now }
+});
+
+module.exports = mongoose.model('Schedule', ScheduleSchema);
