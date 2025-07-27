@@ -77,7 +77,9 @@ export const createGradeRecord = async (req, res) => {
       regularAssessments,
       midterm,
       final,
-      average,
+      ...(gradingType === "letter"
+        ? { averageLetter: average }
+        : { average: average }),
     });
 
     res.status(201).json({ message: "Nhập điểm thành công", gradeRecord });
@@ -160,12 +162,17 @@ export const updateGradeRecord = async (req, res) => {
     gradeRecord.regularAssessments = regularAssessments;
     gradeRecord.midterm = midterm;
     gradeRecord.final = final;
-    gradeRecord.average = calculateSemesterAverage(
+    const average = calculateSemesterAverage(
       regularAssessments,
       midterm,
       final,
       gradingType
     );
+    if (gradingType === "letter") {
+      gradeRecord.averageLetter = average;
+    } else {
+      gradeRecord.average = average;
+    }
 
     await gradeRecord.save();
 
