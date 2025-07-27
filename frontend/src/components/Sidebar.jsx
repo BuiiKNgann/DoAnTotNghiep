@@ -85,6 +85,11 @@ const Sidebar = ({ isOpen, onClose }) => {
             label: "Điểm danh",
             path: "/attendance",
           },
+          {
+            icon: Users,
+            label: "Sổ hạnh kiểm",
+            path: "/conduct",
+          },
         ]
       : []),
   ];

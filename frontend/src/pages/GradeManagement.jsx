@@ -2,17 +2,27 @@
 // import axios from "../ultils/axios.js";
 // import GradeEntryTable from "../components/GradeEntryTable.jsx";
 // import { useAuth } from "../context/AuthContext.jsx";
+
 // const GradeManagement = () => {
 //   const [classes, setClasses] = useState([]);
 //   const [students, setStudents] = useState([]);
 //   const [subjects, setSubjects] = useState([]);
 //   const [semesters, setSemesters] = useState([]);
+//   const [selectedSubjectDetails, setSelectedSubjectDetails] = useState(null);
 
 //   const [selectedClass, setSelectedClass] = useState("");
 //   const [selectedSubject, setSelectedSubject] = useState("");
 //   const [selectedSemester, setSelectedSemester] = useState("");
+
 //   const { user } = useAuth();
 //   const teacherId = user?.role === "teacher" ? user._id : null;
+
+//   const getMaxRegularAssessments = (periodsPerYear) => {
+//     if (periodsPerYear <= 35) return 2;
+//     if (periodsPerYear <= 70) return 3;
+//     return 4;
+//   };
+
 //   useEffect(() => {
 //     fetchDropdownData();
 //   }, []);
@@ -38,28 +48,8 @@
 //     }
 //   };
 
-//   // const fetchStudentsByCondition = async () => {
-//   //   try {
-//   //     const res = await axios.get("/api/student/by-class-subject-semester", {
-//   //       params: {
-//   //         classId: selectedClass,
-//   //         subjectId: selectedSubject,
-//   //         semesterId: selectedSemester,
-//   //       },
-//   //     });
-//   //     setStudents(res.data);
-//   //   } catch (err) {
-//   //     console.error("Lỗi khi tải học sinh:", err);
-//   //   }
-//   // };
 //   const fetchStudentsByCondition = async () => {
 //     try {
-//       console.log("🔍 Gửi request với:", {
-//         classId: selectedClass,
-//         subjectId: selectedSubject,
-//         semesterId: selectedSemester,
-//       });
-
 //       const res = await axios.get("/api/student/filter-by-condition", {
 //         params: {
 //           classId: selectedClass,
@@ -75,6 +65,7 @@
 //       );
 //     }
 //   };
+
 //   return (
 //     <div className="p-6 space-y-6">
 //       <h2 className="text-2xl font-semibold text-gray-700">
@@ -107,7 +98,12 @@
 //           <select
 //             className="w-full border rounded px-3 py-2 bg-white"
 //             value={selectedSubject}
-//             onChange={(e) => setSelectedSubject(e.target.value)}
+//             onChange={(e) => {
+//               const subjectId = e.target.value;
+//               setSelectedSubject(subjectId);
+//               const subject = subjects.find((s) => s._id === subjectId);
+//               setSelectedSubjectDetails(subject || null);
+//             }}
 //           >
 //             <option value="">-- Chọn môn học --</option>
 //             {subjects.map((s) => (
@@ -144,6 +140,11 @@
 //           semesterId={selectedSemester}
 //           classId={selectedClass}
 //           teacherId={teacherId}
+//           maxTX={
+//             selectedSubjectDetails
+//               ? getMaxRegularAssessments(selectedSubjectDetails.periodsPerYear)
+//               : 3
+//           }
 //         />
 //       )}
 //     </div>
@@ -298,6 +299,7 @@ const GradeManagement = () => {
               ? getMaxRegularAssessments(selectedSubjectDetails.periodsPerYear)
               : 3
           }
+          gradingType={selectedSubjectDetails?.gradingType || "numerical"}
         />
       )}
     </div>
