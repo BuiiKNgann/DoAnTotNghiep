@@ -1,10 +1,14 @@
 // routes/gradeRoutes.js
 import express from "express";
 import {
+  calculateYearlyAverageByClass,
   createGradeRecord,
   deleteGradeRecord,
+  deleteYearlyAverage,
   getGradeRecord,
+  getYearlyAverage,
   updateGradeRecord,
+  updateYearlyAverage,
 } from "../controllers/grade.js";
 import { authenticate, authorizeRoles } from "../middleware/auth.js";
 
@@ -31,4 +35,18 @@ router.delete(
   deleteGradeRecord
 ); // ✅ xoá điểm
 
+router.post("/yearly-average", calculateYearlyAverageByClass);
+router.get("/yearly-average", getYearlyAverage);
+router.put(
+  "/yearly-average/:id",
+  authenticate,
+  authorizeRoles("admin", "teacher"),
+  updateYearlyAverage
+);
+router.delete(
+  "/yearly-average/:id",
+  authenticate,
+  authorizeRoles("admin", "teacher"),
+  deleteYearlyAverage
+);
 export default router;
